@@ -4,13 +4,14 @@ import Breadcrumbs from "@/components/Breadcrumbs";
 import Link from "next/link";
 
 interface RecipePageProps {
-  params: {
+  params: Promise<{
     slug: string;
-  };
+  }>;
 }
 
-export default function RecipePage({ params }: RecipePageProps) {
-  const recipe = recipes.find((r) => r.slug === params.slug);
+export default async function RecipePage({ params }: RecipePageProps) {
+  const { slug } = await params;
+  const recipe = recipes.find((r) => r.slug === slug);
 
   if (!recipe) {
     notFound();
@@ -26,6 +27,11 @@ export default function RecipePage({ params }: RecipePageProps) {
   const categoryColor =
     categoryColors[recipe.category as keyof typeof categoryColors] ||
     "from-gray-500 to-gray-600";
+
+  // Искусственно добавляем ошибку для демонстрации error.tsx
+  if (slug === "error-demo") {
+    throw new Error("Демонстрационная ошибка для тестирования error.tsx");
+  }
 
   return (
     <div className="space-y-8">

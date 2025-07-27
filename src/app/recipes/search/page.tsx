@@ -1,20 +1,23 @@
 "use client";
 
-import { useState, useEffect } from "react";
 import { recipes } from "@/lib/data";
 import RecipeCard from "@/components/RecipeCard";
 import Breadcrumbs from "@/components/Breadcrumbs";
+import SearchBar from "@/components/SearchBar";
 
-export default function SearchPage() {
-  const [searchTerm, setSearchTerm] = useState("");
-  const [filteredRecipes, setFilteredRecipes] = useState(recipes);
+interface SearchPageProps {
+  searchParams: Promise<{
+    query?: string;
+  }>;
+}
 
-  useEffect(() => {
-    const filtered = recipes.filter((recipe) =>
-      recipe.title.toLowerCase().includes(searchTerm.toLowerCase())
-    );
-    setFilteredRecipes(filtered);
-  }, [searchTerm]);
+export default async function SearchPage({ searchParams }: SearchPageProps) {
+  const { query } = await searchParams;
+  const searchTerm = query || "";
+
+  const filteredRecipes = recipes.filter((recipe) =>
+    recipe.title.toLowerCase().includes(searchTerm.toLowerCase())
+  );
 
   return (
     <div className="space-y-8">
@@ -32,29 +35,8 @@ export default function SearchPage() {
           Найдите рецепт по названию и откройте для себя новые вкусы
         </p>
 
-        <div className="max-w-md mx-auto relative">
-          <div className="relative">
-            <svg
-              className="absolute left-4 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
-              />
-            </svg>
-            <input
-              type="text"
-              placeholder="Введите название рецепта..."
-              value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
-              className="w-full pl-12 pr-4 py-4 border-2 border-gray-200 rounded-2xl focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all duration-300 text-lg shadow-lg hover:shadow-xl"
-            />
-          </div>
+        <div className="max-w-md mx-auto">
+          <SearchBar placeholder="Введите название рецепта..." />
         </div>
       </div>
 

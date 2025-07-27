@@ -4,13 +4,13 @@ import RecipeCard from "@/components/RecipeCard";
 import Breadcrumbs from "@/components/Breadcrumbs";
 
 interface CategoryPageProps {
-  params: {
+  params: Promise<{
     category: string;
-  };
+  }>;
 }
 
-export default function CategoryPage({ params }: CategoryPageProps) {
-  const category = params.category;
+export default async function CategoryPage({ params }: CategoryPageProps) {
+  const { category } = await params;
 
   if (!categories.includes(category as Category)) {
     notFound();

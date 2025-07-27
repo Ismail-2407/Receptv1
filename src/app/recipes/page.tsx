@@ -1,5 +1,6 @@
 import { recipes } from "@/lib/data";
 import RecipeCard from "@/components/RecipeCard";
+import CategoryMenu from "@/components/CategoryMenu";
 
 export default function RecipesPage() {
   return (
@@ -17,6 +18,10 @@ export default function RecipesPage() {
         </div>
       </div>
 
+      {/* Категории */}
+      <CategoryMenu />
+
+      {/* Рецепты */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
         {recipes.map((recipe, index) => (
           <div
